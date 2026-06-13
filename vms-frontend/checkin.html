@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Check-In/Check-Out - VMS</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --bg-light: #f4f8ff;
+      --card-bg: #ffffff;
+      --primary: #2962ff;
+      --card-border: rgba(41, 98, 255, 0.12);
+    }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--bg-light) 0%, #e8f1ff 100%);
+      color: #273049;
+    }
+    .checkin-container {
+      max-width: 1100px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+    }
+    .header-card {
+      background: linear-gradient(135deg, #1c5ed6 0%, #0c4a9d 100%);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      color: #ffffff;
+      margin-bottom: 2rem;
+      box-shadow: 0 15px 40px rgba(31, 41, 55, 0.08);
+    }
+    .header-card .icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+    }
+    .search-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1.25rem;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 12px 30px rgba(31, 41, 55, 0.06);
+    }
+    .search-box {
+      position: relative;
+    }
+    .form-control {
+      border: 2px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 0.875rem 1.25rem 0.875rem 2.75rem;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.2rem rgba(41, 98, 255, 0.15);
+    }
+    .search-icon {
+      position: absolute;
+      left: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary);
+      font-size: 1.25rem;
+      pointer-events: none;
+    }
+    .visitor-list {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-top: none;
+      border-radius: 0 0 1rem 1rem;
+      max-height: 300px;
+      overflow-y: auto;
+      z-index: 1000;
+      display: none;
+    }
+    .visitor-list.active {
+      display: block;
+    }
+    .visitor-item {
+      padding: 0.875rem 1.25rem;
+      border-bottom: 1px solid var(--card-border);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .visitor-item:hover {
+      background: #f9fafb;
+    }
+    .visitor-item:last-child {
+      border-bottom: none;
+    }
+    .visitor-item-name {
+      font-weight: 600;
+      color: #273049;
+      margin-bottom: 0.25rem;
+    }
+    .visitor-item-company {
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+    .details-section {
+      display: none;
+    }
+    .details-section.active {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .visitor-details-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1.25rem;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(31, 41, 55, 0.06);
+      margin-bottom: 2rem;
+    }
+    .visitor-details-header {
+      background: linear-gradient(135deg, #1c5ed6 0%, #0c4a9d 100%);
+      padding: 2rem;
+      color: #ffffff;
+      text-align: center;
+    }
+    .visitor-photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 1.5rem;
+      background: rgba(255, 255, 255, 0.2);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+    }
+    .visitor-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .visitor-company-header {
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+    .visitor-details-body {
+      padding: 2rem;
+    }
+    .detail-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .detail-item {
+      border-left: 3px solid var(--primary);
+      padding-left: 1rem;
+    }
+    .detail-label {
+      font-size: 0.85rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .detail-value {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #273049;
+    }
+    .status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .status-checkedin {
+      background: rgba(25, 135, 84, 0.15);
+      color: #1a6d4d;
+    }
+    .status-checkedout {
+      background: rgba(220, 53, 69, 0.15);
+      color: #a93442;
+    }
+    .status-pending {
+      background: rgba(255, 193, 7, 0.15);
+      color: #cc8f00;
+    }
+    .action-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--card-border);
+    }
+    .btn-action {
+      padding: 0.875rem 1.5rem;
+      font-weight: 600;
+      border-radius: 0.875rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+    .btn-checkin {
+      background: linear-gradient(135deg, #198754 0%, #0f5135 100%);
+      color: #ffffff;
+    }
+    .btn-checkin:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(25, 135, 84, 0.3);
+    }
+    .btn-checkout {
+      background: linear-gradient(135deg, #dc3545 0%, #a93442 100%);
+      color: #ffffff;
+    }
+    .btn-checkout:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3);
+    }
+    .btn-print {
+      background: linear-gradient(135deg, #0dcaf0 0%, #0a8fa0 100%);
+      color: #ffffff;
+    }
+    .btn-print:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(13, 202, 240, 0.3);
+    }
+    .btn-action:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: #6b7280;
+    }
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+      opacity: 0.5;
+    }
+    @media (max-width: 768px) {
+      .search-section {
+        padding: 1.5rem;
+      }
+      .visitor-details-body {
+        padding: 1.5rem;
+      }
+      .detail-row {
+        gap: 1rem;
+      }
+      .action-buttons {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="checkin-container">
+    <!-- Header -->
+    <div class="header-card">
+      <div class="icon">
+        <i class="fas fa-sign-in-alt"></i>
+      </div>
+      <h1 class="h3 mb-2">Reception Check-In/Check-Out</h1>
+      <p class="mb-0">Manage visitor entry and exit with quick search and pass generation</p>
+    </div>
+
+    <!-- Search Section -->
+    <div class="search-section">
+      <div class="search-box">
+        <i class="fas fa-search search-icon"></i>
+        <input 
+          type="text" 
+          class="form-control" 
+          id="visitorSearch" 
+          placeholder="Search visitor by name, email, or mobile number..."
+          autocomplete="off"
+        >
+        <div class="visitor-list" id="visitorList"></div>
+      </div>
+    </div>
+
+    <!-- Visitor Details Section -->
+    <div class="details-section" id="detailsSection">
+      <div class="visitor-details-card">
+        <div class="visitor-details-header">
+          <div class="visitor-photo">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="visitor-name" id="visitorNameHeader">John Doe</div>
+          <div class="visitor-company-header" id="visitorCompanyHeader">Tech Solutions Inc</div>
+        </div>
+        <div class="visitor-details-body">
+          <div class="detail-row">
+            <div class="detail-item">
+              <div class="detail-label">Email</div>
+              <div class="detail-value" id="visitorEmail">john@techsolutions.com</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Mobile</div>
+              <div class="detail-value" id="visitorMobile">+91 9876543210</div>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-item">
+              <div class="detail-label">Purpose</div>
+              <div class="detail-value" id="visitorPurpose">Business Meeting</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Visit Date</div>
+              <div class="detail-value" id="visitorDate">June 15, 2026</div>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-item">
+              <div class="detail-label">Status</div>
+              <div id="visitorStatus">
+                <span class="status-indicator status-pending">
+                  <i class="fas fa-hourglass-half"></i> Pending Check-In
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="action-buttons">
+            <button class="btn-action btn-checkin" id="checkinBtn" onclick="checkIn()">
+              <i class="fas fa-arrow-right"></i> Check-In
+            </button>
+            <button class="btn-action btn-checkout" id="checkoutBtn" onclick="checkOut()" disabled>
+              <i class="fas fa-arrow-left"></i> Check-Out
+            </button>
+            <button class="btn-action btn-print" onclick="printPass()">
+              <i class="fas fa-print"></i> Print Pass
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="emptyState">
+      <i class="fas fa-search"></i>
+      <h5>Search for a Visitor</h5>
+      <p>Enter visitor name, email, or mobile number to get started</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <script>
+    // Sample visitor data
+    const visitors = [
+      {
+        id: 1,
+        name: 'John Doe',
+        company: 'Tech Solutions Inc',
+        email: 'john@techsolutions.com',
+        mobile: '+91 9876543210',
+        purpose: 'Business Meeting',
+        date: 'June 15, 2026',
+        status: 'pending'
+      },
+      {
+        id: 2,
+        name: 'Sarah Miller',
+        company: 'Creative Designs Ltd',
+        email: 'sarah@creativelabs.com',
+        mobile: '+91 8765432109',
+        purpose: 'Job Interview',
+        date: 'June 14, 2026',
+        status: 'pending'
+      },
+      {
+        id: 3,
+        name: 'Michael Johnson',
+        company: 'Global Consultants',
+        email: 'michael@globalconsult.com',
+        mobile: '+91 7654321098',
+        purpose: 'Consultation',
+        date: 'June 13, 2026',
+        status: 'checkedin'
+      },
+      {
+        id: 4,
+        name: 'Emily Parker',
+        company: 'Logistics Plus',
+        email: 'emily@logisticsplus.com',
+        mobile: '+91 6543210987',
+        purpose: 'Delivery',
+        date: 'June 13, 2026',
+        status: 'checkedout'
+      },
+      {
+        id: 5,
+        name: 'Angela Lewis',
+        company: 'Finance Corp',
+        email: 'angela@financecorp.com',
+        mobile: '+91 4321098765',
+        purpose: 'Audit',
+        date: 'June 15, 2026',
+        status: 'pending'
+      }
+    ];
+
+    let selectedVisitor = null;
+
+    const searchInput = document.getElementById('visitorSearch');
+    const visitorList = document.getElementById('visitorList');
+    const detailsSection = document.getElementById('detailsSection');
+    const emptyState = document.getElementById('emptyState');
+
+    searchInput.addEventListener('input', function(e) {
+      const query = e.target.value.toLowerCase().trim();
+      
+      if (query.length === 0) {
+        visitorList.classList.remove('active');
+        return;
+      }
+
+      const filtered = visitors.filter(v => 
+        v.name.toLowerCase().includes(query) ||
+        v.email.toLowerCase().includes(query) ||
+        v.mobile.includes(query)
+      );
+
+      if (filtered.length > 0) {
+        visitorList.innerHTML = filtered.map(v => `
+          <div class="visitor-item" onclick="selectVisitor(${v.id})">
+            <div class="visitor-item-name">${v.name}</div>
+            <div class="visitor-item-company">${v.company}</div>
+          </div>
+        `).join('');
+        visitorList.classList.add('active');
+      } else {
+        visitorList.innerHTML = '<div class="visitor-item">No visitors found</div>';
+        visitorList.classList.add('active');
+      }
+    });
+
+    function selectVisitor(id) {
+      selectedVisitor = visitors.find(v => v.id === id);
+      
+      if (selectedVisitor) {
+        // Update details
+        document.getElementById('visitorNameHeader').textContent = selectedVisitor.name;
+        document.getElementById('visitorCompanyHeader').textContent = selectedVisitor.company;
+        document.getElementById('visitorEmail').textContent = selectedVisitor.email;
+        document.getElementById('visitorMobile').textContent = selectedVisitor.mobile;
+        document.getElementById('visitorPurpose').textContent = selectedVisitor.purpose;
+        document.getElementById('visitorDate').textContent = selectedVisitor.date;
+
+        // Update buttons and status
+        const checkinBtn = document.getElementById('checkinBtn');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        const statusDiv = document.getElementById('visitorStatus');
+
+        if (selectedVisitor.status === 'pending') {
+          checkinBtn.disabled = false;
+          checkoutBtn.disabled = true;
+          statusDiv.innerHTML = '<span class="status-indicator status-pending"><i class="fas fa-hourglass-half"></i> Pending Check-In</span>';
+        } else if (selectedVisitor.status === 'checkedin') {
+          checkinBtn.disabled = true;
+          checkoutBtn.disabled = false;
+          statusDiv.innerHTML = '<span class="status-indicator status-checkedin"><i class="fas fa-check-circle"></i> Checked In</span>';
+        } else if (selectedVisitor.status === 'checkedout') {
+          checkinBtn.disabled = true;
+          checkoutBtn.disabled = true;
+          statusDiv.innerHTML = '<span class="status-indicator status-checkedout"><i class="fas fa-times-circle"></i> Checked Out</span>';
+        }
+
+        // Show details, hide search
+        searchInput.value = '';
+        visitorList.classList.remove('active');
+        emptyState.style.display = 'none';
+        detailsSection.classList.add('active');
+      }
+    }
+
+    function checkIn() {
+      if (selectedVisitor) {
+        selectedVisitor.status = 'checkedin';
+        const checkinBtn = document.getElementById('checkinBtn');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        const statusDiv = document.getElementById('visitorStatus');
+
+        checkinBtn.disabled = true;
+        checkoutBtn.disabled = false;
+        statusDiv.innerHTML = '<span class="status-indicator status-checkedin"><i class="fas fa-check-circle"></i> Checked In at ' + new Date().toLocaleTimeString() + '</span>';
+        
+        alert(`${selectedVisitor.name} checked in successfully!`);
+      }
+    }
+
+    function checkOut() {
+      if (selectedVisitor) {
+        selectedVisitor.status = 'checkedout';
+        const checkinBtn = document.getElementById('checkinBtn');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        const statusDiv = document.getElementById('visitorStatus');
+
+        checkinBtn.disabled = true;
+        checkoutBtn.disabled = true;
+        statusDiv.innerHTML = '<span class="status-indicator status-checkedout"><i class="fas fa-times-circle"></i> Checked Out at ' + new Date().toLocaleTimeString() + '</span>';
+        
+        alert(`${selectedVisitor.name} checked out successfully!`);
+      }
+    }
+
+    function printPass() {
+      if (selectedVisitor) {
+        const passContent = `
+          ==============================
+          VISITOR PASS
+          ==============================
+          Name: ${selectedVisitor.name}
+          Company: ${selectedVisitor.company}
+          Mobile: ${selectedVisitor.mobile}
+          Purpose: ${selectedVisitor.purpose}
+          Visit Date: ${selectedVisitor.date}
+          Status: ${selectedVisitor.status.toUpperCase()}
+          ==============================
+        `;
+        
+        const printWindow = window.open('', '', 'height=400,width=600');
+        printWindow.document.write('<pre>' + passContent + '</pre>');
+        printWindow.document.close();
+        printWindow.print();
+      }
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      if (e.target !== searchInput && e.target !== visitorList) {
+        visitorList.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>
