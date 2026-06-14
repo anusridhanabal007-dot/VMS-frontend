@@ -277,69 +277,78 @@
     </div>
 
     <!-- Statistics -->
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="d-flex justify-content-between align-items-start">
-          <div>
-            <div class="stat-value">2,847</div>
-            <div class="stat-label">Total Visitors (This Month)</div>
+    <div class="row g-3 stats-row">
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="stat-card">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="stat-value">2,847</div>
+              <div class="stat-label">Total Visitors (This Month)</div>
+            </div>
+            <i class="fas fa-users" style="color: #2962ff; font-size: 1.5rem;"></i>
           </div>
-          <i class="fas fa-users" style="color: #2962ff; font-size: 1.5rem;"></i>
         </div>
       </div>
-      <div class="stat-card">
-        <div class="d-flex justify-content-between align-items-start">
-          <div>
-            <div class="stat-value">89.3%</div>
-            <div class="stat-label">Check-In Rate</div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="stat-card">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="stat-value">89.3%</div>
+              <div class="stat-label">Check-In Rate</div>
+            </div>
+            <i class="fas fa-sign-in-alt" style="color: #198754; font-size: 1.5rem;"></i>
           </div>
-          <i class="fas fa-sign-in-alt" style="color: #198754; font-size: 1.5rem;"></i>
         </div>
       </div>
-      <div class="stat-card">
-        <div class="d-flex justify-content-between align-items-start">
-          <div>
-            <div class="stat-value">56</div>
-            <div class="stat-label">Avg Daily Visitors</div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="stat-card">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="stat-value">56</div>
+              <div class="stat-label">Avg Daily Visitors</div>
+            </div>
+            <i class="fas fa-chart-line" style="color: #0dcaf0; font-size: 1.5rem;"></i>
           </div>
-          <i class="fas fa-chart-line" style="color: #0dcaf0; font-size: 1.5rem;"></i>
         </div>
       </div>
-      <div class="stat-card">
-        <div class="d-flex justify-content-between align-items-start">
-          <div>
-            <div class="stat-value">34</div>
-            <div class="stat-label">Approved Companies</div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="stat-card">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="stat-value">34</div>
+              <div class="stat-label">Approved Companies</div>
+            </div>
+            <i class="fas fa-building" style="color: #ff8c00; font-size: 1.5rem;"></i>
           </div>
-          <i class="fas fa-building" style="color: #ff8c00; font-size: 1.5rem;"></i>
         </div>
       </div>
     </div>
 
-    <!-- Filter Section -->
+    <!-- Filters Section -->
     <div class="filter-section">
+      <h5 class="mb-3">Filter Reports</h5>
       <div class="row g-3 mb-3">
-        <div class="col-md-3">
-          <label for="dateFrom" class="form-label">Date From</label>
-          <input type="date" class="form-control" id="dateFrom">
+        <div class="col-12 col-sm-6 col-md-3">
+          <label for="dateFrom" class="form-label">From Date</label>
+          <input type="date" class="form-control" id="dateFrom" placeholder="Select start date">
         </div>
-        <div class="col-md-3">
-          <label for="dateTo" class="form-label">Date To</label>
-          <input type="date" class="form-control" id="dateTo">
+        <div class="col-12 col-sm-6 col-md-3">
+          <label for="dateTo" class="form-label">To Date</label>
+          <input type="date" class="form-control" id="dateTo" placeholder="Select end date">
         </div>
-        <div class="col-md-3">
-          <label for="purposeFilter" class="form-label">Filter by Purpose</label>
+        <div class="col-12 col-sm-6 col-md-3">
+          <label for="purposeFilter" class="form-label">Purpose</label>
           <select class="form-select" id="purposeFilter">
             <option value="">All Purposes</option>
             <option value="business">Business Meeting</option>
             <option value="interview">Job Interview</option>
-            <option value="delivery">Delivery</option>
             <option value="consultation">Consultation</option>
+            <option value="delivery">Delivery</option>
             <option value="maintenance">Maintenance</option>
           </select>
         </div>
-        <div class="col-md-3">
-          <label for="statusFilter" class="form-label">Filter by Status</label>
+        <div class="col-12 col-sm-6 col-md-3">
+          <label for="statusFilter" class="form-label">Status</label>
           <select class="form-select" id="statusFilter">
             <option value="">All Status</option>
             <option value="pending">Pending</option>
@@ -348,32 +357,30 @@
           </select>
         </div>
       </div>
+
       <div class="row g-3">
-        <div class="col-12">
+        <div class="col-12 col-md-8">
           <label for="searchReports" class="form-label">Search</label>
           <div class="search-box">
-            <input type="text" class="form-control" id="searchReports" placeholder="Search by visitor name, company, email, or mobile...">
+            <input type="text" class="form-control" id="searchReports" placeholder="Search by name, company, email, or mobile...">
             <i class="fas fa-search search-icon"></i>
           </div>
         </div>
-      </div>
-      <div class="button-group">
-        <button class="btn-export btn-export-pdf" onclick="exportPDF()">
-          <i class="fas fa-file-pdf"></i> Export PDF
-        </button>
-        <button class="btn-export btn-export-excel" onclick="exportExcel()">
-          <i class="fas fa-file-excel"></i> Export Excel
-        </button>
-        <button class="btn-export btn-reset" onclick="resetFilters()">
-          <i class="fas fa-redo"></i> Reset Filters
-        </button>
+        <div class="col-12 col-md-4 d-flex align-items-end gap-2">
+          <button class="btn btn-primary" style="flex: 1; border-radius: 0.875rem;">
+            <i class="fas fa-filter"></i> Apply Filters
+          </button>
+          <button class="btn btn-reset" onclick="resetFilters()" style="flex: 1; border-radius: 0.875rem;">
+            <i class="fas fa-redo"></i> Reset
+          </button>
+        </div>
       </div>
     </div>
 
-    <!-- Reports Table -->
+    <!-- Table Section -->
     <div class="table-section">
       <div class="table-responsive">
-        <table class="table" id="reportsTable">
+        <table class="table">
           <thead>
             <tr>
               <th>Visitor Name</th>
@@ -388,15 +395,28 @@
             </tr>
           </thead>
           <tbody id="tableBody">
-            <!-- Table rows will be populated by JavaScript -->
+            <!-- Dynamically populated -->
           </tbody>
         </table>
       </div>
-      <div class="table-responsive">
-        <div class="pagination-custom" style="padding: 1.5rem;">
-          <div class="pagination-info">Showing <span id="recordCount">0</span> of <span id="totalRecords">0</span> records</div>
-          <div>
-            <small class="text-muted">Last updated: <span id="lastUpdate"></span></small>
+
+      <!-- Export Buttons & Pagination -->
+      <div style="padding: 1.5rem;">
+        <div class="button-group">
+          <button class="btn-export btn-export-pdf" onclick="exportPDF()">
+            <i class="fas fa-file-pdf"></i> Export PDF
+          </button>
+          <button class="btn-export btn-export-excel" onclick="exportExcel()">
+            <i class="fas fa-file-excel"></i> Export Excel
+          </button>
+        </div>
+
+        <div class="pagination-custom">
+          <div class="pagination-info">
+            Showing <strong id="recordCount">0</strong> of <strong id="totalRecords">0</strong> records
+          </div>
+          <div class="pagination-info">
+            Last Updated: <span id="lastUpdate">--:--:--</span>
           </div>
         </div>
       </div>
@@ -404,6 +424,11 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <!-- Libraries for PDF and Excel Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
   <script>
     // Sample visitor reports data
     const reportsData = [
