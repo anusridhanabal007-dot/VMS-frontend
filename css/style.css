@@ -1,0 +1,17 @@
+body {
+    background-color: #f4f8ff;
+}
+
+.card {
+    border-radius: 15px;
+}
+
+.btn {
+    border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 15px;
+    }
+}

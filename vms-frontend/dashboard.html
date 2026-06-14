@@ -111,6 +111,43 @@
                 border-radius: 1.5rem 1.5rem 0 0;
             }
         }
+        @media (max-width: 768px) {
+            .content {
+                padding: 1rem;
+            }
+            .dashboard-card {
+                margin-bottom: 1rem;
+            }
+            .dashboard-card .icon-wrapper {
+                width: 48px;
+                height: 48px;
+            }
+            .report-card {
+                padding: 1rem;
+            }
+            .footer-note {
+                text-align: center;
+            }
+        }
+        @media (max-width: 576px) {
+            .sidebar {
+                border-radius: 1rem 1rem 0 0;
+                padding: 1rem;
+            }
+            .sidebar .brand {
+                font-size: 1rem;
+                text-align: center;
+            }
+            .sidebar .nav-link {
+                text-align: center;
+                margin-bottom: 0.5rem;
+            }
+            .content h1,
+            .content h2,
+            .content h3 {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 
@@ -157,7 +194,7 @@
                     </div>
                 </div>
                 <div class="row g-4 mb-4">
-                    <div class="col-md-6 col-xl-3">
+                    <div class="col-12 col-sm-6 col-xl-3">
                         <div class="p-4 dashboard-card">
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <div class="icon-wrapper icon-dashboard"><i class="fas fa-users"></i></div>
@@ -167,7 +204,7 @@
                             <h3 class="mb-0">1,254</h3>
                         </div>
                     </div>
-                    <div class="col-md-6 col-xl-3">
+                    <div class="col-12 col-sm-6 col-xl-3">
                         <div class="p-4 dashboard-card">
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <div class="icon-wrapper icon-approval"><i class="fas fa-hourglass-half"></i></div>
@@ -177,7 +214,7 @@
                             <h3 class="mb-0">48</h3>
                         </div>
                     </div>
-                    <div class="col-md-6 col-xl-3">
+                    <div class="col-12 col-sm-6 col-xl-3">
                         <div class="p-4 dashboard-card">
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <div class="icon-wrapper icon-visits"><i class="fas fa-calendar-day"></i></div>
@@ -187,7 +224,7 @@
                             <h3 class="mb-0">312</h3>
                         </div>
                     </div>
-                    <div class="col-md-6 col-xl-3">
+                    <div class="col-12 col-sm-6 col-xl-3">
                         <div class="p-4 dashboard-card">
                             <div class="d-flex align-items-center justify-content-between mb-3">
                                 <div class="icon-wrapper icon-passes"><i class="fas fa-id-card"></i></div>
