@@ -285,6 +285,42 @@
         grid-template-columns: 1fr;
       }
     }
+    @media (max-width: 768px) {
+      .search-box {
+        padding: 1rem;
+      }
+      .visitor-details-card {
+        padding: 1rem;
+      }
+      .detail-row {
+        flex-direction: column;
+      }
+      .detail-item {
+        margin-bottom: 1rem;
+      }
+      .action-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .btn-action {
+        width: 100%;
+      }
+    }
+    @media (max-width: 576px) {
+      .visitor-details-header {
+        text-align: center;
+      }
+      .visitor-photo {
+        margin: 0 auto 1rem;
+      }
+      .visitor-name {
+        font-size: 1.3rem;
+      }
+      .visitor-company-header {
+        font-size: 0.9rem;
+      }
+    }
   </style>
 </head>
 <body>
