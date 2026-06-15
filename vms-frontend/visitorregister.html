@@ -236,8 +236,13 @@
                                     class="required-mark">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                <input type="tel" class="form-control" id="mobileNumber"
-                                    placeholder="Enter your mobile number" required>
+                                <input type="tel" 
+                                class="form-control"
+                                id="mobileNumber"
+                                placeholder="Enter your mobile number"
+                                pattern="[0-9]{10}"
+                                maxlength="10"
+                                required>
                             </div>
                         </div>
                     </div>
@@ -280,8 +285,18 @@
                                 <option value="other">Other</option>
                             </select>
                         </div>
+                        <div class="form-group-wrapper"
+                            id="otherPurposeField"
+                            style="display: none;">
+                            <label class="form-label">
+                                Specify Purpose
+                            </label>
+                            <input type="text"
+                            class="form-control"
+                            id="otherPurpose"
+                            placeholder="Enter purpose">
+                        </div>
                     </div>
-
                     <!-- Row 4: Photo Upload -->
                     <div class="form-group-wrapper">
                         <label class="form-label">Upload Photo <span class="required-mark">*</span></label>
@@ -323,17 +338,16 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
     <script>
-        document.getElementById('photoInput').addEventListener('change', function (e) {
+        document.getElementById('photoInput').addEventListener('change', function () {
             if (this.files && this.files[0]) {
                 const fileName = this.files[0].name;
-                document.querySelector('.upload-area:has(#photoInput) .upload-area-label').textContent = 'Photo: ' + fileName;
+                this.parentElement.querySelector('.upload-area-label').textContent ='Photo: ' + fileName;
             }
         });
-
-        document.getElementById('idProofInput').addEventListener('change', function (e) {
+        document.getElementById('idProofInput').addEventListener('change', function () {
             if (this.files && this.files[0]) {
                 const fileName = this.files[0].name;
-                document.querySelector('.upload-area:has(#idProofInput) .upload-area-label').textContent = 'ID: ' + fileName;
+                this.parentElement.querySelector('.upload-area-label').textContent ='ID: ' + fileName;
             }
         });
 
@@ -345,6 +359,18 @@
                 alert('Registration submitted successfully!');
             }
             this.classList.add('was-validated');
+        });
+        document.getElementById('purposeVisit').addEventListener('change', function () {
+            const otherField = document.getElementById('otherPurposeField');
+            const otherInput = document.getElementById('otherPurpose');
+            if (this.value === 'other') {
+                otherField.style.display = 'block';
+                otherInput.required = true;
+            } else {
+                otherField.style.display = 'none';
+                otherInput.required = false;
+                otherInput.value = '';
+            }
         });
     </script>
 </body>
