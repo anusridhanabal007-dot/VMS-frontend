@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from db import db, cursor
 app = Flask(__name__)
 admin_user = {"username": "admin", "password": "admin123"}
 visitors = []
@@ -16,27 +17,48 @@ def login():
     return jsonify({'success': False, 'message': 'Invalid username or password'}), 401
 @app.route('/register-visitor', methods=['POST'])
 def register_visitor():
-    data = request.get_json(force=True, silent=True)
-    if not data:
-        return jsonify({'success': False, 'message': 'JSON payload required'}), 400
-    name = data.get('name')
-    email = data.get('email')
-    phone = data.get('phone')
-    purpose = data.get('purpose')
-    if not all([name, email, phone, purpose]):
-        return jsonify({'success': False, 'message': 'Missing visitor fields'}), 400
-    visitor = {
-        'id': len(visitors) + 1,
-        'name': name,
-        'email': email,
-        'phone': phone,
-        'purpose': purpose,
-    }
-    visitors.append(visitor)
-    return jsonify({'success': True, 'visitor': visitor}), 201
-@app.route('/visitors', methods=['GET'])
-def list_visitors():
-    return jsonify({'success': True, 'visitors': visitors})
 
+    data = request.json
+
+    name = data['name']
+    mobile = data['mobile']
+    email = data['email']
+    company = data['company']
+
+    sql = """
+    INSERT INTO visitor_vms
+    (visitor_name, visitor_mobile,
+     visitor_mail, visitor_company)
+    VALUES (%s,%s,%s,%s)
+    """
+
+    cursor.execute(
+        sql,
+        (name, mobile, email, company)
+    )
+
+    db.commit()
+
+    return jsonify({
+        "message": "Visitor Registered Successfully"
+    })
+@app.route('/visitors', methods=['GET'])
+def get_visitors():
+
+    cursor.execute("SELECT * FROM visitor_vms")
+    rows = cursor.fetchall()
+
+    visitors = []
+
+    for row in rows:
+        visitors.append({
+            "visitor_id": row[0],
+            "name": row[1],
+            "mobile": row[2],
+            "email": row[3],
+            "company": row[4]
+        })
+
+    return jsonify(visitors)
 if __name__ == '__main__':
     app.run(debug=True)
