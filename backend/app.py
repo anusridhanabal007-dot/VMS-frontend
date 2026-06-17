@@ -1,20 +1,38 @@
 from flask import Flask, request, jsonify
 from db import db, cursor
 app = Flask(__name__)
-admin_user = {"username": "admin", "password": "admin123"}
-visitors = []
 @app.route('/login', methods=['POST'])
 def login():
-    data = request.get_json(force=True, silent=True)
-    if not data:
-        return jsonify({'success': False, 'message': 'JSON payload required'}), 400
 
-    username = data.get('username')
-    password = data.get('password')
-    if username == admin_user['username'] and password == admin_user['password']:
-        return jsonify({'success': True, 'message': 'Login successful'})
+    data = request.json
 
-    return jsonify({'success': False, 'message': 'Invalid username or password'}), 401
+    username = data['username']
+    password = data['password']
+
+    sql = """
+    SELECT user_id, user_name, user_role
+    FROM users_vms
+    WHERE user_name=%s
+    AND user_password=%s
+    """
+
+    cursor.execute(sql, (username, password))
+
+    user = cursor.fetchone()
+
+    if user:
+        return jsonify({
+            "success": True,
+            "user_id": user[0],
+            "username": user[1],
+            "role": user[2]
+        })
+
+    return jsonify({
+        "success": False,
+        "message": "Invalid Credentials"
+    }), 401
+visitors = []
 @app.route('/register-visitor', methods=['POST'])
 def register_visitor():
 
