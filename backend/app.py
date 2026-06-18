@@ -88,6 +88,30 @@ def upload_files():
         "success": True,
         "message": "Files uploaded successfully"
     })
+@app.route('/dashboard', methods=['GET'])
+def dashboard():
+    cursor.execute("SELECT COUNT(*) FROM Visitor_vms")
+    total_visitors = cursor.fetchone()[0]
+
+    cursor.execute("""
+        SELECT COUNT(*) 
+        FROM Visitor_vms
+        WHERE DATE(created_at) = CURDATE()
+    """)
+    today_visitors = cursor.fetchone()[0]
+
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM Visitor_vms
+        WHERE visitor_status = 'pending'
+    """)
+    pending_approvals = cursor.fetchone()[0]
+
+    return jsonify({
+        "total_visitors": total_visitors,
+        "today_visitors": today_visitors,
+        "pending_approvals": pending_approvals
+    })
 @app.route('/visitors', methods=['GET'])
 def get_visitors():
 
