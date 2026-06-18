@@ -1,6 +1,13 @@
 from flask import Flask, request, jsonify
 from db import db, cursor
+from werkzeug.utils import secure_filename
+import os
 app = Flask(__name__)
+PHOTO_FOLDER = "uploads/photos"
+ID_FOLDER = "uploads/idproofs"
+
+os.makedirs(PHOTO_FOLDER, exist_ok=True)
+os.makedirs(ID_FOLDER, exist_ok=True)
 @app.route('/login', methods=['POST'])
 def login():
 
@@ -19,7 +26,6 @@ def login():
     cursor.execute(sql, (username, password))
 
     user = cursor.fetchone()
-
     if user:
         return jsonify({
             "success": True,
@@ -59,6 +65,28 @@ def register_visitor():
 
     return jsonify({
         "message": "Visitor Registered Successfully"
+    })
+@app.route('/upload-files', methods=['POST'])
+def upload_files():
+
+    photo = request.files.get('photo')
+    idproof = request.files.get('idproof')
+
+    if not photo or not idproof:
+        return jsonify({
+            "success": False,
+            "message": "Please upload both files"
+        }), 400
+
+    photo_name = secure_filename(photo.filename)
+    id_name = secure_filename(idproof.filename)
+
+    photo.save(os.path.join(PHOTO_FOLDER, photo_name))
+    idproof.save(os.path.join(ID_FOLDER, id_name))
+
+    return jsonify({
+        "success": True,
+        "message": "Files uploaded successfully"
     })
 @app.route('/visitors', methods=['GET'])
 def get_visitors():
