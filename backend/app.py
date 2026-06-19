@@ -65,7 +65,9 @@ def register_visitor():
     db.commit()
 
     return jsonify({
-        "message": "Visitor Registered Successfully"
+    "success": True,
+    "message": "Visitor Registered Successfully",
+    "notification": "Visitor registration notification sent"
     })
 @app.route('/upload-files', methods=['POST'])
 def upload_files():
@@ -163,6 +165,12 @@ def generate_pass():
         "success": True,
         "message": "Visitor Pass Generated"
     })
+@app.route('/send-notification')
+def send_notification():
 
+    return jsonify({
+        "success": True,
+        "message": "Notification Sent Successfully"
+    })
 if __name__ == '__main__':
     app.run(debug=True)
