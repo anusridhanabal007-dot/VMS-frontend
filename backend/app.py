@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from db import db, cursor
 from werkzeug.utils import secure_filename
 import os
+import qrcode
 app = Flask(__name__)
 PHOTO_FOLDER = "uploads/photos"
 ID_FOLDER = "uploads/idproofs"
@@ -130,5 +131,38 @@ def get_visitors():
         })
 
     return jsonify(visitors)
+@app.route('/reports/daily')
+def daily_report():
+    return jsonify({
+        "report": "Daily Report"
+    })
+@app.route('/reports/weekly')
+def weekly_report():
+    return jsonify({
+        "report": "Weekly Report"
+    })
+
+@app.route('/reports/monthly')
+def monthly_report():
+    return jsonify({
+        "report": "Monthly Report"
+    })
+
+@app.route('/generate-pass')
+def generate_pass():
+
+    data = """Visitor Name: Anusri Dhanabal
+    Host Employee: Admin
+    Date: 2026-06-19"""
+
+    img = qrcode.make(data)
+
+    img.save("qr_code/visitor_pass.png")
+
+    return jsonify({
+        "success": True,
+        "message": "Visitor Pass Generated"
+    })
+
 if __name__ == '__main__':
     app.run(debug=True)
