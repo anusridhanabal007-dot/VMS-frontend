@@ -4,6 +4,12 @@ from werkzeug.utils import secure_filename
 import os
 import qrcode
 app = Flask(__name__)
+@app.route('/')
+def home():
+    return jsonify({
+        "success": True,
+        "message": "VMS Backend Running Successfully"
+    })
 PHOTO_FOLDER = "uploads/photos"
 ID_FOLDER = "uploads/idproofs"
 
