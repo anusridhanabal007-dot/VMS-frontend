@@ -9,9 +9,14 @@ ID_FOLDER = "uploads/idproofs"
 
 os.makedirs(PHOTO_FOLDER, exist_ok=True)
 os.makedirs(ID_FOLDER, exist_ok=True)
+os.makedirs("qr_code", exist_ok=True)
 @app.route('/login', methods=['POST'])
 def login():
-
+    if cursor is None:
+    return jsonify({
+        "success": False,
+        "message": "Database not available"
+    })
     data = request.json
 
     username = data['username']
@@ -42,7 +47,11 @@ def login():
 visitors = []
 @app.route('/register-visitor', methods=['POST'])
 def register_visitor():
-
+    if cursor is None:
+    return jsonify({
+        "success": False,
+        "message": "Database not available"
+    })
     data = request.json
 
     name = data['name']
@@ -93,6 +102,11 @@ def upload_files():
     })
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
+    if cursor is None:
+    return jsonify({
+        "success": False,
+        "message": "Database not available"
+    })
     cursor.execute("SELECT COUNT(*) FROM Visitor_vms")
     total_visitors = cursor.fetchone()[0]
 
@@ -117,7 +131,11 @@ def dashboard():
     })
 @app.route('/visitors', methods=['GET'])
 def get_visitors():
-
+    if cursor is None:
+    return jsonify({
+        "success": False,
+        "message": "Database not available"
+    })
     cursor.execute("SELECT * FROM visitor_vms")
     rows = cursor.fetchall()
 
@@ -173,4 +191,5 @@ def send_notification():
         "message": "Notification Sent Successfully"
     })
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)

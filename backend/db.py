@@ -1,12 +1,18 @@
 import mysql.connector
 
-db = mysql.connector.connect(
-    host="localhost",
-    user="vmsuser",
-    password="vms123",
-    database="VMS"
-)
+db = None
+cursor = None
 
-cursor = db.cursor()
+try:
+    db = mysql.connector.connect(
+        host="localhost",
+        user="vmsuser",
+        password="vms123",
+        database="VMS"
+    )
 
-print("Database Connected Successfully")
+    cursor = db.cursor()
+    print("Database Connected Successfully")
+
+except Exception as e:
+    print("Database Connection Skipped:", e)
