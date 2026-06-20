@@ -13,10 +13,10 @@ os.makedirs("qr_code", exist_ok=True)
 @app.route('/login', methods=['POST'])
 def login():
     if cursor is None:
-    return jsonify({
-        "success": False,
-        "message": "Database not available"
-    })
+        return jsonify({
+            "success": False,
+            "message": "Database not available"
+            })
     data = request.json
 
     username = data['username']
@@ -48,10 +48,10 @@ visitors = []
 @app.route('/register-visitor', methods=['POST'])
 def register_visitor():
     if cursor is None:
-    return jsonify({
-        "success": False,
-        "message": "Database not available"
-    })
+        return jsonify({
+            "success": False,
+            "message": "Database not available"
+            })
     data = request.json
 
     name = data['name']
@@ -103,10 +103,10 @@ def upload_files():
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
     if cursor is None:
-    return jsonify({
-        "success": False,
-        "message": "Database not available"
-    })
+        return jsonify({
+            "success": False,
+            "message": "Database not available"
+            })
     cursor.execute("SELECT COUNT(*) FROM Visitor_vms")
     total_visitors = cursor.fetchone()[0]
 
@@ -132,10 +132,10 @@ def dashboard():
 @app.route('/visitors', methods=['GET'])
 def get_visitors():
     if cursor is None:
-    return jsonify({
-        "success": False,
-        "message": "Database not available"
-    })
+        return jsonify({
+            "success": False,
+            "message": "Database not available"
+            })
     cursor.execute("SELECT * FROM visitor_vms")
     rows = cursor.fetchall()
 
